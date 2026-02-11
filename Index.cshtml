@@ -1,0 +1,70 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<main>
+    <section class="row" aria-labelledby="exportTitle">
+        <h1 id="exportTitle">Subscribe Youtube chanel</h1>
+        @*<p class="lead">Enter a username and password, then submit to export to a CSV that Excel can open.</p>*@
+
+        @if (TempData["ExportMessage"] != null)
+        {
+            <div class="alert alert-info">@TempData["ExportMessage"]</div>
+        }
+        @if (TempData["SubscribeMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["SubscribeMessage"]</div>
+        }
+
+        @if (ViewBag.Credentials != null)
+        {
+            var rows = (System.Collections.Generic.List<string[]>)ViewBag.Credentials;
+            <div class="mt-3">
+                <h2>All Submissions</h2>
+                @if (rows.Count <= 1)
+                {
+                    <div class="alert alert-warning">No submissions yet.</div>
+                }
+                else
+                {
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Password</th>
+                                <th>Created UTC</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (var i = 1; i < rows.Count; i++)
+                            {
+                                <tr>
+                                    <td>@rows[i][0]</td>
+                                    <td>@rows[i][1]</td>
+                                    <td>@rows[i][2]</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        }
+
+        @using (Html.BeginForm("Export", "Home", FormMethod.Post, new { @class = "mt-3" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" name="username" required />
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required />
+            </div>
+
+            <button type="submit" class="btn btn-primary">Subscribe</button>
+        }
+    </section>
+</main>
