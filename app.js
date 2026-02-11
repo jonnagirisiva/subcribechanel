@@ -108,6 +108,16 @@
       return;
     }
 
+    const isAdminLogin = username === adminUsername && password === adminPassword;
+    if (isAdminLogin) {
+      adminActions.classList.remove("d-none");
+      submissions.classList.remove("d-none");
+      toggleTable.textContent = "Hide submissions";
+      renderTable();
+      setAlert(alertSuccess, "Admin access granted. Showing all submissions.");
+      return;
+    }
+
     const items = loadSubmissions();
     items.push({
       username,
